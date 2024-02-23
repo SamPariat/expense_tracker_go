@@ -1,8 +1,11 @@
 package user_controller
 
 import (
+	"errors"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/SamPariat/expenses-tracker/internal/core/ports"
 	"github.com/SamPariat/expenses-tracker/utils"
@@ -32,7 +35,12 @@ func (userController *UserControllerImpl) GetUsers(ctx *gin.Context) {
 		return
 	}
 
-	utils.ReturnOk(ctx, users, "Succesfully fetched all users")
+	if len(users) == 0 {
+		utils.ReturnNotFound(ctx, nil, "No users found")
+		return
+	}
+
+	utils.ReturnOk(ctx, users, "Successfully fetched all users")
 }
 
 func (userController *UserControllerImpl) GetUser(ctx *gin.Context) {
@@ -46,12 +54,17 @@ func (userController *UserControllerImpl) GetUser(ctx *gin.Context) {
 	userId, _ := primitive.ObjectIDFromHex(req.Id)
 
 	user, err := userController.userService.GetUser(userId)
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		utils.ReturnNotFound(ctx, nil, "User not found")
+		return
+	}
+
 	if err != nil {
 		utils.ReturnInternalServerError(ctx, err, "Something went wrong while fetching the user")
 		return
 	}
 
-	utils.ReturnOk(ctx, user, "Succesfully fetched the user")
+	utils.ReturnOk(ctx, user, "Successfully fetched the user")
 }
 
 func (userController *UserControllerImpl) CreateUser(ctx *gin.Context) {
@@ -68,11 +81,44 @@ func (userController *UserControllerImpl) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	utils.ReturnOk(ctx, user, "Succesfully created the user")
+	utils.ReturnCreated(ctx, user, "Successfully created the user")
 }
 
 func (userController *UserControllerImpl) UpdateUser(ctx *gin.Context) {
+	req := new(UpdateUserRequest)
+
+	if err := req.Validate(ctx); err != nil {
+		utils.ReturnBadRequest(ctx, err, "Failed validation for updating the user")
+		return
+	}
+
+	userId, _ := primitive.ObjectIDFromHex(ctx.Param("id"))
+
+	modifiedCount, err := userController.userService.UpdateUser(userId, req.ConvertToUser())
+	if err != nil {
+		utils.ReturnInternalServerError(ctx, err, "Something went wrong while updating the user")
+		return
+	}
+	if modifiedCount == 0 {
+		utils.ReturnNotFound(ctx, nil, "User not found")
+		return
+	}
+
+	utils.ReturnOk(ctx, modifiedCount, "Successfully updated the user")
 }
 
 func (userController *UserControllerImpl) DeleteUser(ctx *gin.Context) {
+	userId, _ := primitive.ObjectIDFromHex(ctx.Param("id"))
+
+	modifiedCount, err := userController.userService.DeleteUser(userId)
+	if err != nil {
+		utils.ReturnInternalServerError(ctx, err, "Something went wrong while deleting the user")
+		return
+	}
+	if modifiedCount == 0 {
+		utils.ReturnNotFound(ctx, nil, "User not found")
+		return
+	}
+
+	utils.ReturnOk(ctx, modifiedCount, "Successfully deleted the user")
 }

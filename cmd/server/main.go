@@ -26,21 +26,21 @@ func main() {
 		})
 	}
 
-	user := router.Group("/user")
+	user := router.Group("/users")
 	{
 		user.GET("", allControllers.UserController.GetUsers)
 		user.GET("/:id", allControllers.UserController.GetUser)
 		user.POST("", allControllers.UserController.CreateUser)
-		user.PATCH("/:id", allControllers.UserController.UpdateUser)
+		user.PUT("/:id", allControllers.UserController.UpdateUser)
 		user.DELETE("/:id", allControllers.UserController.DeleteUser)
 	}
 
-	product := router.Group("/product")
+	product := router.Group("/products")
 	{
 		product.GET("", allControllers.ProductController.GetProducts)
 		product.GET("/:id", allControllers.ProductController.GetProduct)
 		product.POST("", allControllers.ProductController.CreateProduct)
-		product.PATCH("/:id", allControllers.ProductController.UpdateProduct)
+		product.PUT("/:id", allControllers.ProductController.UpdateProduct)
 		product.DELETE("/:id", allControllers.ProductController.DeleteProduct)
 	}
 

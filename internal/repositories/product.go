@@ -30,10 +30,10 @@ func (productRepository *ProductRepositoryImpl) CreateProduct(product *domain.Pr
 	return domain.Product{}, nil
 }
 
-func (productRepository *ProductRepositoryImpl) UpdateProduct(id primitive.ObjectID) (domain.Product, error) {
-	return domain.Product{}, nil
+func (productRepository *ProductRepositoryImpl) UpdateProduct(id primitive.ObjectID, product *domain.Product) (int64, error) {
+	return 0, nil
 }
 
-func (productRepository *ProductRepositoryImpl) DeleteProduct(id primitive.ObjectID) (domain.Product, error) {
-	return domain.Product{}, nil
+func (productRepository *ProductRepositoryImpl) DeleteProduct(id primitive.ObjectID) (int64, error) {
+	return 0, nil
 }

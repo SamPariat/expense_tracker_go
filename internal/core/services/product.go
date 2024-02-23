@@ -29,10 +29,10 @@ func (productService *ProductServiceImpl) CreateProduct(user *domain.Product) (d
 	return productService.productRepository.CreateProduct(user)
 }
 
-func (productService *ProductServiceImpl) UpdateProduct(id primitive.ObjectID) (domain.Product, error) {
-	return productService.productRepository.UpdateProduct(id)
+func (productService *ProductServiceImpl) UpdateProduct(id primitive.ObjectID, product *domain.Product) (int64, error) {
+	return productService.productRepository.UpdateProduct(id, product)
 }
 
-func (productService *ProductServiceImpl) DeleteProduct(id primitive.ObjectID) (domain.Product, error) {
+func (productService *ProductServiceImpl) DeleteProduct(id primitive.ObjectID) (int64, error) {
 	return productService.productRepository.DeleteProduct(id)
 }

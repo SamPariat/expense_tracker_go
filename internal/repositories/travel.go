@@ -30,10 +30,10 @@ func (travelRepository *TravelRepositoryImpl) CreateTravel(travel *domain.Travel
 	return domain.Travel{}, nil
 }
 
-func (travelRepository *TravelRepositoryImpl) UpdateTravel(id primitive.ObjectID) (domain.Travel, error) {
-	return domain.Travel{}, nil
+func (travelRepository *TravelRepositoryImpl) UpdateTravel(id primitive.ObjectID, travel *domain.Travel) (int64, error) {
+	return 0, nil
 }
 
-func (travelRepository *TravelRepositoryImpl) DeleteTravel(id primitive.ObjectID) (domain.Travel, error) {
-	return domain.Travel{}, nil
+func (travelRepository *TravelRepositoryImpl) DeleteTravel(id primitive.ObjectID) (int64, error) {
+	return 0, nil
 }

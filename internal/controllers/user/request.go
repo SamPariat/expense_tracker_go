@@ -21,6 +21,14 @@ type CreateUserRequest struct {
 	ImageUrl *string `json:"imageUrl" validate:"omitempty,url"`
 }
 
+type UpdateUserRequest struct {
+	Name     string  `json:"name" validate:"min=3"`
+	Email    string  `json:"email" validate:"email"`
+	Password string  `json:"password" validate:"min=7"`
+	Income   float64 `json:"income" validate:"gt=0"`
+	ImageUrl *string `json:"imageUrl" validate:"omitempty,url"`
+}
+
 func (getAllUsersRequest *GetAllUsersRequest) Validate(ctx *gin.Context) error {
 	return ctx.ShouldBindQuery(getAllUsersRequest)
 }
@@ -31,4 +39,8 @@ func (getUserRequest *GetUserRequest) Validate(ctx *gin.Context) error {
 
 func (createUserRequest *CreateUserRequest) Validate(ctx *gin.Context) error {
 	return ctx.ShouldBindJSON(createUserRequest)
+}
+
+func (updateUserRequest *UpdateUserRequest) Validate(ctx *gin.Context) error {
+	return ctx.ShouldBindJSON(&updateUserRequest)
 }

@@ -29,10 +29,10 @@ func (travelService *TravelServiceImpl) CreateTravel(travel *domain.Travel) (dom
 	return travelService.travelRepository.CreateTravel(travel)
 }
 
-func (travelService *TravelServiceImpl) UpdateTravel(id primitive.ObjectID) (domain.Travel, error) {
-	return travelService.travelRepository.UpdateTravel(id)
+func (travelService *TravelServiceImpl) UpdateTravel(id primitive.ObjectID, travel *domain.Travel) (int64, error) {
+	return travelService.travelRepository.UpdateTravel(id, travel)
 }
 
-func (travelService *TravelServiceImpl) DeleteTravel(id primitive.ObjectID) (domain.Travel, error) {
+func (travelService *TravelServiceImpl) DeleteTravel(id primitive.ObjectID) (int64, error) {
 	return travelService.travelRepository.DeleteTravel(id)
 }
