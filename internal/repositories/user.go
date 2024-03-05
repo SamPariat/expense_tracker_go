@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/SamPariat/expenses-tracker/common"
+	constants "github.com/SamPariat/expenses-tracker/common"
 	"github.com/SamPariat/expenses-tracker/internal/core/domain"
 	"github.com/SamPariat/expenses-tracker/internal/core/ports"
 )
@@ -24,7 +24,7 @@ func NewUserRepository(mongoClient *mongo.Client) ports.UserRepository {
 }
 
 func (userRepository *UserRepositoryImpl) GetUsers(page int64, limit int64) ([]domain.User, error) {
-	cursor, err := userRepository.mongoClient.Database(common.Database).Collection(common.UsersCollection).Find(context.TODO(), bson.D{})
+	cursor, err := userRepository.mongoClient.Database(constants.Database).Collection(constants.UsersCollection).Find(context.TODO(), bson.D{})
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (userRepository *UserRepositoryImpl) GetUser(id primitive.ObjectID) (domain
 
 	var user domain.User
 
-	err := userRepository.mongoClient.Database(common.Database).Collection(common.UsersCollection).FindOne(context.TODO(), filter).Decode(&user)
+	err := userRepository.mongoClient.Database(constants.Database).Collection(constants.UsersCollection).FindOne(context.TODO(), filter).Decode(&user)
 	if err != nil {
 		return domain.User{}, err
 	}
@@ -56,7 +56,7 @@ func (userRepository *UserRepositoryImpl) CreateUser(user *domain.User) (domain.
 	user.CreatedAt = primitive.NewDateTimeFromTime(time.Now())
 	user.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
 
-	savedResult, err := userRepository.mongoClient.Database(common.Database).Collection(common.UsersCollection).InsertOne(context.TODO(), user)
+	savedResult, err := userRepository.mongoClient.Database(constants.Database).Collection(constants.UsersCollection).InsertOne(context.TODO(), user)
 	if err != nil {
 		return domain.User{}, err
 	}
@@ -72,7 +72,7 @@ func (userRepository *UserRepositoryImpl) UpdateUser(id primitive.ObjectID, user
 	filter := bson.M{"_id": id}
 	update := bson.M{"$set": user}
 
-	updateResult, err := userRepository.mongoClient.Database(common.Database).Collection(common.UsersCollection).UpdateOne(context.TODO(), filter, update)
+	updateResult, err := userRepository.mongoClient.Database(constants.Database).Collection(constants.UsersCollection).UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		return 0, err
 	}
@@ -83,7 +83,7 @@ func (userRepository *UserRepositoryImpl) UpdateUser(id primitive.ObjectID, user
 func (userRepository *UserRepositoryImpl) DeleteUser(id primitive.ObjectID) (int64, error) {
 	filter := bson.M{"_id": id}
 
-	deletedResult, err := userRepository.mongoClient.Database(common.Database).Collection(common.UsersCollection).DeleteOne(context.TODO(), filter)
+	deletedResult, err := userRepository.mongoClient.Database(constants.Database).Collection(constants.UsersCollection).DeleteOne(context.TODO(), filter)
 	if err != nil {
 		return 0, err
 	}
