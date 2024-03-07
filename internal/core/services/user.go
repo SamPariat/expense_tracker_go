@@ -29,10 +29,10 @@ func (userService *UserServiceImpl) CreateUser(user *domain.User) (domain.User, 
 	return userService.userRepository.CreateUser(user)
 }
 
-func (userService *UserServiceImpl) UpdateUser(id primitive.ObjectID) (domain.User, error) {
-	return userService.userRepository.UpdateUser(id)
+func (userService *UserServiceImpl) UpdateUser(id primitive.ObjectID, user *domain.User) (int64, error) {
+	return userService.userRepository.UpdateUser(id, user)
 }
 
-func (userService *UserServiceImpl) DeleteUser(id primitive.ObjectID) (domain.User, error) {
+func (userService *UserServiceImpl) DeleteUser(id primitive.ObjectID) (int64, error) {
 	return userService.userRepository.DeleteUser(id)
 }

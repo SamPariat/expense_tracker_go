@@ -14,11 +14,19 @@ type GetUserRequest struct {
 }
 
 type CreateUserRequest struct {
-	Name     string  `json:"name" validate:"required,min=3"`
-	Email    string  `json:"email" validate:"required,email"`
-	Password string  `json:"password" validate:"required,min=7"`
-	Income   float64 `json:"income" validate:"required,gt=0"`
-	ImageUrl *string `json:"imageUrl" validate:"omitempty,url"`
+	Name     string  `json:"name" bson:"name" validate:"required,min=3"`
+	Email    string  `json:"email" bson:"email" validate:"required,email"`
+	Password string  `json:"password" bson:"password" validate:"required,min=7"`
+	Income   float64 `json:"income" bson:"income" validate:"required,gt=0"`
+	ImageUrl *string `json:"imageUrl" bson:"imageUrl" validate:"omitempty,url"`
+}
+
+type UpdateUserRequest struct {
+	Name     string  `json:"name" bson:"name" validate:"min=3"`
+	Email    string  `json:"email" bson:"email" validate:"email"`
+	Password string  `json:"password" bson:"password" validate:"min=7"`
+	Income   float64 `json:"income" bson:"income" validate:"gt=0"`
+	ImageUrl *string `json:"imageUrl" bson:"imageUrl" validate:"omitempty,url"`
 }
 
 func (getAllUsersRequest *GetAllUsersRequest) Validate(ctx *gin.Context) error {
@@ -31,4 +39,8 @@ func (getUserRequest *GetUserRequest) Validate(ctx *gin.Context) error {
 
 func (createUserRequest *CreateUserRequest) Validate(ctx *gin.Context) error {
 	return ctx.ShouldBindJSON(createUserRequest)
+}
+
+func (updateUserRequest *UpdateUserRequest) Validate(ctx *gin.Context) error {
+	return ctx.ShouldBindJSON(&updateUserRequest)
 }
