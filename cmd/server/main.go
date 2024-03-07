@@ -35,15 +35,6 @@ func main() {
 		user.DELETE("/:id", allControllers.UserController.DeleteUser)
 	}
 
-	product := router.Group("/products")
-	{
-		product.GET("", allControllers.ProductController.GetProducts)
-		product.GET("/:id", allControllers.ProductController.GetProduct)
-		product.POST("", allControllers.ProductController.CreateProduct)
-		product.PUT("/:id", allControllers.ProductController.UpdateProduct)
-		product.DELETE("/:id", allControllers.ProductController.DeleteProduct)
-	}
-
 	err = router.Run(":9623")
 	if err != nil {
 		log.Fatal("Error running server", err)
